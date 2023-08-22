@@ -9,6 +9,8 @@
 #include "win32_exception.h"
 #include <optional>
 #include <vector>
+#include "win32_keyboard.h"
+#include "win32_mouse.h"
 
 class win32_window
 {
@@ -65,13 +67,13 @@ private:
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 public:
-	//Keyboard kbd;
-	//Mouse mouse;
+	win32_keyboard kbd;
+	win32_mouse mouse;
+	HWND hWnd;
 private:
 	bool cursorEnabled = true;
 	int width;
-	int height;
-	HWND hWnd;
+	int height;	
 	std::vector<BYTE> rawBuffer;
 	std::string commandLine;
 };

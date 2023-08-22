@@ -6,13 +6,17 @@
    ======================================================================== */
 #include "gen_game.h"
 #include <Windows.h>
+#include <stdio.h>
 
 /**********************************************************************************
 * #TODO: Wish list
 * Tiled world
 * Hero
 * AI NPC / Enemies 
+* xinput
+* xaudio2
 * assimp
+* asset mng
 * sprites
 * D2D
 * D3D
@@ -20,7 +24,6 @@
 * Networking multiplayer
 **********************************************************************************/
 
-static void UpdateAndRender(gen_input Input, float DeltaTime)
+static void GenUpdate(gen_input Input, float DeltaTime)
 {
-	//OutputDebugStringA("test\n");
 }

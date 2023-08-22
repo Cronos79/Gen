@@ -89,6 +89,9 @@
     <ClInclude Include="gen_game.h" />
     <ClInclude Include="win32_app.h" />
     <ClInclude Include="win32_exception.h" />
+    <ClInclude Include="win32_keyboard.h" />
+    <ClInclude Include="win32_mouse.h" />
+    <ClInclude Include="win32_timer.h" />
     <ClInclude Include="win32_win.h" />
     <ClInclude Include="win32_window.h" />
     <ClInclude Include="win32_windows_throw_macros.h" />
@@ -98,6 +101,9 @@
     <ClCompile Include="win32_app.cpp" />
     <ClCompile Include="win32_exception.cpp" />
     <ClCompile Include="win32_entry_point.cpp" />
+    <ClCompile Include="win32_keyboard.cpp" />
+    <ClCompile Include="win32_mouse.cpp" />
+    <ClCompile Include="win32_timer.cpp" />
     <ClCompile Include="win32_window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

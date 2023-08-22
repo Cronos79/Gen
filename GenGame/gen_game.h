@@ -9,6 +9,18 @@
 
 #define bool32 int32_t
 
+// Tile stuff
+struct gen_tile
+{
+	uint32_t Tile;
+};
+
+struct gen_tile_map
+{
+	gen_tile Tiles[];
+};
+
+// Input stuff
 struct gen_input_button
 {
 	bool32 IsDown;
