@@ -54,6 +54,9 @@
     <ClInclude Include="win32_timer.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
+    <ClInclude Include="win32_d2d.h">
+      <Filter>Header Files\win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="win32_app.cpp">
@@ -78,6 +81,9 @@
       <Filter>Source Files\win32</Filter>
     </ClCompile>
     <ClCompile Include="win32_timer.cpp">
+      <Filter>Source Files\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="win32_d2d.cpp">
       <Filter>Source Files\win32</Filter>
     </ClCompile>
   </ItemGroup>

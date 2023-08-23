@@ -11,6 +11,8 @@
 #include <vector>
 #include "win32_keyboard.h"
 #include "win32_mouse.h"
+#include "win32_d2d.h"
+#include <memory>
 
 class win32_window
 {
@@ -76,5 +78,6 @@ private:
 	int height;	
 	std::vector<BYTE> rawBuffer;
 	std::string commandLine;
+	std::unique_ptr<win32_d2d> pGfx;
 };
 

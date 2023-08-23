@@ -83,6 +83,7 @@ win32_window::win32_window(int width, int height, const char* name)
 	{
 		throw GENWND_LAST_EXCEPT();
 	}
+	pGfx = std::make_unique<win32_d2d>(hWnd, width, height);
 }
 
 win32_window::~win32_window()

@@ -26,4 +26,15 @@
 
 static void GenUpdate(gen_input Input, float DeltaTime)
 {
+	if (Input.LStick.Y != 0.0f)
+	{
+		char buffer[256];
+		_snprintf_s(buffer, sizeof(buffer),
+			"%.02fX %.02fY\n", Input.LStick.X, Input.LStick.Y);
+		OutputDebugStringA(buffer);
+	}
+	if (Input.A.IsDown)
+	{
+		OutputDebugStringA("buffer");
+	}
 }

@@ -6,11 +6,15 @@
    ======================================================================== */
 #include "win32_app.h"
 #include "gen_game.cpp"
+#include <Xinput.h>
 
 win32_app::win32_app(const std::string& commandLine /*= ""*/)
 	: commandLine(commandLine),
 	wnd(1280, 720, "Gen Engine")
-{}
+{
+	Input = {};
+	GlobalPerfCountFrequency = 0;
+}
 
 win32_app::~win32_app()
 {}
@@ -46,12 +50,61 @@ int win32_app::Begin()
 		HandleInput(dt);
 		Update(dt);
 		Render(dt);
-		EnforceFrameRate(LastCounter, SleepIsGranular, TargetSecondsPerFrame, LastCycleCount);
+		EnforceFrameRate(LastCounter, SleepIsGranular, TargetSecondsPerFrame, LastCycleCount, dt);
 	}
 }
 
 void win32_app::HandleInput(float dt)
 {	
+	// #TODO: Finish all buttons
+	float LXNorm = 0.0f;
+	float LYNorm = 0.0f;
+	bool AIsDown = false;
+	bool BIsDown = false;
+	bool XIsDown = false;
+	bool YIsDown = false;
+	Input = {};
+	DWORD dwResult;
+	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
+	{
+		XINPUT_GAMEPAD* Pad = nullptr;
+		XINPUT_STATE state;
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+		// Simply get the state of the controller from XInput.
+		dwResult = XInputGetState(i, &state);
+
+		if (dwResult == ERROR_SUCCESS)
+		{
+			Pad = &state.Gamepad;
+
+			float LX = Pad->sThumbLX;
+			float LY = Pad->sThumbLY;
+
+			LXNorm = Win32ProcessXInputStickValue(LX, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+			LYNorm = Win32ProcessXInputStickValue(LY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+
+			AIsDown = ((Pad->wButtons & XINPUT_GAMEPAD_A) == XINPUT_GAMEPAD_A);
+			BIsDown = ((Pad->wButtons & XINPUT_GAMEPAD_B) == XINPUT_GAMEPAD_B);
+			XIsDown = ((Pad->wButtons & XINPUT_GAMEPAD_X) == XINPUT_GAMEPAD_X);
+			YIsDown = ((Pad->wButtons & XINPUT_GAMEPAD_Y) == XINPUT_GAMEPAD_Y);
+		}
+		else
+		{
+			// Controller is not connected
+		}
+	}		
+
+	// Move code
+	if (LYNorm != 0.0f)
+	{
+		Input.LStick.Y = LYNorm;
+	}
+	if (LXNorm != 0.0f)
+	{
+		Input.LStick.X = LXNorm;
+	}
+	
 	if (wnd.kbd.KeyIsPressed('W'))
 	{
 		Input.LStick.Y = 1.0f;
@@ -68,6 +121,24 @@ void win32_app::HandleInput(float dt)
 	{
 		Input.LStick.X = 1.0f;
 	}
+
+	// buttons	
+	if (wnd.kbd.KeyIsPressed('1') || AIsDown)
+	{
+		Input.A.IsDown = true;
+	}
+	if (wnd.kbd.KeyIsPressed('2') || BIsDown)
+	{
+		Input.B.IsDown = true;
+	}
+	if (wnd.kbd.KeyIsPressed('3') || XIsDown)
+	{
+		Input.X.IsDown = true;
+	}
+	if (wnd.kbd.KeyIsPressed('4') || YIsDown)
+	{
+		Input.Y.IsDown = true;
+	}
 }
 
 void win32_app::Update(float dt)
@@ -80,7 +151,7 @@ void win32_app::Render(float dt)
 	// Render sprites from game
 }
 
-void win32_app::EnforceFrameRate(LARGE_INTEGER &LastCounter, bool SleepIsGranular, float TargetSecondsPerFrame, uint64_t& LastCycleCount)
+void win32_app::EnforceFrameRate(LARGE_INTEGER &LastCounter, bool SleepIsGranular, float TargetSecondsPerFrame, uint64_t& LastCycleCount, float dt)
 {
 	LARGE_INTEGER WorkCounter = Win32GetWallClock();
 	float WorkSecondsElapsed = Win32GetSecondsElapsed(LastCounter, WorkCounter);
@@ -130,7 +201,7 @@ void win32_app::EnforceFrameRate(LARGE_INTEGER &LastCounter, bool SleepIsGranula
 
 	char FPSBuffer[256];
 	_snprintf_s(FPSBuffer, sizeof(FPSBuffer),
-		"%.02fmc/f\n", MCPF);
+		"%.02fmc/f %.04fDeltaTime\n", MCPF, dt);
 	OutputDebugStringA(FPSBuffer);
 #endif	
 }
