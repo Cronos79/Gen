@@ -11,7 +11,18 @@
 #include "gen_math.h"
 #include "gen_player.h"
 
+#if GEN_SLOW
+#define Assert(Expression) if(!(Expression)) {*(int *)0 = 0;}
+#else
+#define Assert(Expression)
+#endif
+
 #define bool32 int32_t
+
+#define Kilobytes(Value) ((Value)*1024LL)
+#define Megabytes(Value) (Kilobytes(Value)*1024LL)
+#define Gigabytes(Value) (Megabytes(Value)*1024LL)
+#define Terabytes(Value) (Gigabytes(Value)*1024LL)
 
 struct gen_drawable
 {
@@ -94,7 +105,8 @@ struct game_state
 struct game_memory
 {
 	bool32 IsInitialized;
+	float DeltaTime;
 	std::vector<gen_drawable> Drawables;
-	uint64_t PermanentStorageSize;
-	void* PermanentStorage;
+	uint64_t GameStorageSize;
+	void* GameStorage;
 };

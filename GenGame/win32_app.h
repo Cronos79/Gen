@@ -56,7 +56,6 @@ private:
 	win32_window wnd;
 	win32_timer timer;
 	gen_input Input;
-	std::vector<gen_drawable> Drawables;
-	game_memory Memory;
+	game_memory GameMemory;
 };
 

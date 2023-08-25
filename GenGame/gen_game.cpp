@@ -26,8 +26,20 @@
 * Networking multiplayer
 **********************************************************************************/
 
-static void GenUpdate(game_memory* Memory, gen_input Input, float DeltaTime)
-{	
+static void GenUpdate(game_memory* Memory, gen_input Input)
+{
+	Assert(sizeof(game_state) <= Memory->GameStorageSize);
+	game_state* GameState = (game_state*)Memory->GameStorage;
+	if (!Memory->IsInitialized)
+	{
+		gen_player Player = InitPlayer();
+		GameState->Player = Player;
+		GameState->Player.Location.X = 150;
+		GameState->Player.Location.Y = 150;
+
+		Memory->IsInitialized = true;
+	}
+
 	uint32_t Tiles00[16][29] =
 	{
 		{1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, 1},

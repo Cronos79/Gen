@@ -36,11 +36,18 @@ int win32_app::Begin()
 	QueryPerformanceCounter(&LastCounter);
 	uint64_t LastCycleCount = __rdtsc();
 
-	gen_player Player = InitPlayer();
-	game_state State;
-	State.Player = Player;
-	game_memory Memory;
-	Memory.Drawables = Drawables;
+	//game_state State;
+	
+	GameMemory = {};
+	GameMemory.GameStorageSize = Gigabytes(4);
+#if GEN_INTERNAL
+	LPVOID BaseAddress = (LPVOID)Terabytes(2);
+#else
+	LPVOID BaseAddress = 0;
+#endif
+	void* GameMemoryBlock = VirtualAlloc(BaseAddress, (size_t)GameMemory.GameStorageSize,
+		MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+	GameMemory.GameStorage = GameMemoryBlock;
 	while (true)
 	{
 		// process all messages pending, but to not block for new messages
@@ -147,8 +154,8 @@ void win32_app::HandleInput(float dt)
 
 void win32_app::Update(float dt)
 {	
-	GenUpdate(&Memory, Input, dt);
-	Drawables = Memory.Drawables;
+	GameMemory.DeltaTime = dt;
+	GenUpdate(&GameMemory, Input);
 }
 
 void win32_app::Render(float dt)
@@ -156,7 +163,7 @@ void win32_app::Render(float dt)
 	int size = 64;
 	wnd.D2D().RT()->BeginDraw();	
 
-	for (gen_drawable& drawable : Drawables)
+	for (gen_drawable& drawable : GameMemory.Drawables)
 	{
 		auto c = D2D1::ColorF(drawable.Color.r, drawable.Color.g, drawable.Color.b, drawable.Color.a);
 		wnd.D2D().DrawRect(D2D1::RectF(size * drawable.Column, size * drawable.Row, (size * drawable.Column) + size, (size * drawable.Row) + size), c);
