@@ -53,3 +53,23 @@ void win32_d2d::DrawRect(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill)
 		pBrush->Release();
 	}		
 }
+
+void win32_d2d::DrawPlayer(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill /*= true*/)
+{
+	if (!pRT) { return; }
+	ID2D1SolidColorBrush* pBrush = NULL;
+	pRT->CreateSolidColorBrush(D2D1::ColorF(Color), &pBrush);
+
+	if (pBrush)
+	{
+		if (Fill)
+		{
+			pRT->FillRectangle(Rect, pBrush);
+		}
+		else
+		{
+			pRT->DrawRectangle(Rect, pBrush);
+		}
+		pBrush->Release();
+	}
+}

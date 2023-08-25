@@ -40,6 +40,24 @@ static void GenUpdate(game_memory* Memory, gen_input Input)
 		Memory->IsInitialized = true;
 	}
 
+	float PlayerSpeed = 8.0f;
+	if (Input.A.IsDown)
+	{
+		PlayerSpeed = 30.0f;
+	}
+	else
+	{
+		PlayerSpeed = 8.0f;
+	}
+	if (Input.LStick.Y != 0.0f)
+	{
+		GameState->Player.Location.Y += -Input.LStick.Y * PlayerSpeed;
+	}
+	if (Input.LStick.X != 0.0f)
+	{
+		GameState->Player.Location.X += Input.LStick.X * PlayerSpeed;
+	}
+
 	uint32_t Tiles00[16][29] =
 	{
 		{1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, 1},

@@ -19,6 +19,7 @@ public:
 public:
 	ID2D1HwndRenderTarget* RT();
 	void DrawRect(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill = true);
+	void DrawPlayer(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill = true);
 private:
 	Microsoft::WRL::ComPtr<ID2D1Factory> pD2DFactory;
 	Microsoft::WRL::ComPtr<ID2D1HwndRenderTarget> pRT;
