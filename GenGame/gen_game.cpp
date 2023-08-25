@@ -4,9 +4,11 @@
    $Creator: Matt Brock $
    $Notice: (C) Copyright 2023 by CronoGames All Rights Reserved. $
    ======================================================================== */
-#include "gen_game.h"
 #include <Windows.h>
 #include <stdio.h>
+#include <vector>
+#include "gen_game.h"
+#include "gen_player.cpp"
 
 /**********************************************************************************
 * #TODO: Wish list
@@ -24,17 +26,55 @@
 * Networking multiplayer
 **********************************************************************************/
 
-static void GenUpdate(gen_input Input, float DeltaTime)
-{
-	if (Input.LStick.Y != 0.0f)
+static void GenUpdate(game_memory* Memory, gen_input Input, float DeltaTime)
+{	
+	uint32_t Tiles00[16][29] =
 	{
-		char buffer[256];
-		_snprintf_s(buffer, sizeof(buffer),
-			"%.02fX %.02fY\n", Input.LStick.X, Input.LStick.Y);
-		OutputDebugStringA(buffer);
-	}
-	if (Input.A.IsDown)
+		{1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 0},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
+		{1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  0, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, 1},
+	};
+
+	for (int Row = 0;
+		Row < 16;
+		++Row)
 	{
-		OutputDebugStringA("buffer");
+		for (int Column = 0;
+			Column < 29;
+			++Column)
+		{
+			int32_t ttype = Tiles00[Row][Column];
+			if (ttype == 0)
+			{
+				gen_drawable d = {};
+				d.Column = Column;
+				d.Row = Row;
+				d.Color = D2D1::ColorF(D2D1::ColorF::Gray);
+				d.Fill = true;
+				Memory->Drawables.push_back(d);
+			}
+			else
+			{
+				gen_drawable d = {};
+				d.Column = Column;
+				d.Row = Row;
+				d.Color = D2D1::ColorF(D2D1::ColorF::BurlyWood);
+				d.Fill = true;
+				Memory->Drawables.push_back(d);
+			}
+		}
 	}
 }

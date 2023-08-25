@@ -21,49 +21,35 @@ win32_d2d::win32_d2d(HWND hWnd, int width, int height)
 				rc.bottom - rc.top)
 		),
 		&pRT
-	);
-
-	ID2D1SolidColorBrush* pBlackBrush = NULL;
-	if (SUCCEEDED(hr))
-	{
-
-		pRT->CreateSolidColorBrush(
-			D2D1::ColorF(D2D1::ColorF::Black),
-			&pBlackBrush
-		);
-	}
-
-	ID2D1SolidColorBrush* pRedBrush = NULL;
-	if (SUCCEEDED(hr))
-	{
-
-		pRT->CreateSolidColorBrush(
-			D2D1::ColorF(D2D1::ColorF::Red),
-			&pRedBrush
-		);
-	}
-
-	pRT->BeginDraw();
-
-	pRT->DrawRectangle(
-		D2D1::RectF(
-			/*rc.left + 100.0f,
-			rc.top + 100.0f,
-			rc.right - 100.0f,
-			rc.bottom - 100.0f),*/
-			0,
-			0,
-			128,
-			128),
-		pRedBrush);
-
-	hr = pRT->EndDraw();
-	
-	pBlackBrush->Release();
-	pRedBrush->Release();
+	);	
 }
 
 win32_d2d::~win32_d2d()
 {
 
+}
+
+ID2D1HwndRenderTarget* win32_d2d::RT()
+{
+	return pRT.Get();
+}
+
+void win32_d2d::DrawRect(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill)
+{
+	if (!pRT) { return; }
+	ID2D1SolidColorBrush* pBrush = NULL;
+	pRT->CreateSolidColorBrush(D2D1::ColorF(Color), &pBrush);
+	
+	if (pBrush)
+	{
+		if (Fill)
+		{
+			pRT->FillRectangle(Rect, pBrush);
+		}
+		else
+		{
+			pRT->DrawRectangle(Rect, pBrush);
+		}		
+		pBrush->Release();
+	}		
 }

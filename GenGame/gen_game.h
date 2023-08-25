@@ -6,8 +6,21 @@
    ======================================================================== */
 #pragma once
 #include <stdint.h>
+#include <d2d1.h>
+#include <vector>
+#include "gen_math.h"
+#include "gen_player.h"
 
 #define bool32 int32_t
+
+struct gen_drawable
+{
+	int32_t Row;
+	int32_t Column;
+	D2D1_COLOR_F Color;
+	bool Fill;
+	int32_t ZOrder;
+};
 
 // Tile stuff
 struct gen_tile
@@ -71,4 +84,17 @@ struct gen_input
 		};
 	};
 	
+};
+
+struct game_state
+{
+	gen_player Player;
+};
+
+struct game_memory
+{
+	bool32 IsInitialized;
+	std::vector<gen_drawable> Drawables;
+	uint64_t PermanentStorageSize;
+	void* PermanentStorage;
 };

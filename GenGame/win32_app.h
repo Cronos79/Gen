@@ -9,6 +9,7 @@
 #include "win32_window.h"
 #include "gen_game.h"
 #include "win32_timer.h"
+#include <vector>
 
 class win32_app
 {
@@ -55,5 +56,7 @@ private:
 	win32_window wnd;
 	win32_timer timer;
 	gen_input Input;
+	std::vector<gen_drawable> Drawables;
+	game_memory Memory;
 };
 

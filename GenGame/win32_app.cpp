@@ -10,7 +10,7 @@
 
 win32_app::win32_app(const std::string& commandLine /*= ""*/)
 	: commandLine(commandLine),
-	wnd(1280, 720, "Gen Engine")
+	wnd(1920, 1080, "Gen Engine")
 {
 	Input = {};
 	GlobalPerfCountFrequency = 0;
@@ -36,7 +36,11 @@ int win32_app::Begin()
 	QueryPerformanceCounter(&LastCounter);
 	uint64_t LastCycleCount = __rdtsc();
 
-
+	gen_player Player = InitPlayer();
+	game_state State;
+	State.Player = Player;
+	game_memory Memory;
+	Memory.Drawables = Drawables;
 	while (true)
 	{
 		// process all messages pending, but to not block for new messages
@@ -142,13 +146,23 @@ void win32_app::HandleInput(float dt)
 }
 
 void win32_app::Update(float dt)
-{
-	GenUpdate(Input, dt);
+{	
+	GenUpdate(&Memory, Input, dt);
+	Drawables = Memory.Drawables;
 }
 
 void win32_app::Render(float dt)
 {
-	// Render sprites from game
+	int size = 64;
+	wnd.D2D().RT()->BeginDraw();	
+
+	for (gen_drawable& drawable : Drawables)
+	{
+		auto c = D2D1::ColorF(drawable.Color.r, drawable.Color.g, drawable.Color.b, drawable.Color.a);
+		wnd.D2D().DrawRect(D2D1::RectF(size * drawable.Column, size * drawable.Row, (size * drawable.Column) + size, (size * drawable.Row) + size), c);
+		
+	}
+	wnd.D2D().RT()->EndDraw();
 }
 
 void win32_app::EnforceFrameRate(LARGE_INTEGER &LastCounter, bool SleepIsGranular, float TargetSecondsPerFrame, uint64_t& LastCycleCount, float dt)

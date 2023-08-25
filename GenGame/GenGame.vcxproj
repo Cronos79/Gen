@@ -88,7 +88,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="gen_dungeon.h" />
     <ClInclude Include="gen_game.h" />
+    <ClInclude Include="gen_math.h" />
+    <ClInclude Include="gen_player.h" />
     <ClInclude Include="win32_app.h" />
     <ClInclude Include="win32_d2d.h" />
     <ClInclude Include="win32_exception.h" />
@@ -100,7 +103,10 @@
     <ClInclude Include="win32_windows_throw_macros.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gen_dungeon.cpp" />
     <ClCompile Include="gen_game.cpp" />
+    <ClCompile Include="gen_math.cpp" />
+    <ClCompile Include="gen_player.cpp" />
     <ClCompile Include="win32_app.cpp" />
     <ClCompile Include="win32_d2d.cpp" />
     <ClCompile Include="win32_exception.cpp" />

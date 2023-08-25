@@ -57,6 +57,15 @@
     <ClInclude Include="win32_d2d.h">
       <Filter>Header Files\win32</Filter>
     </ClInclude>
+    <ClInclude Include="gen_dungeon.h">
+      <Filter>Header Files\gen</Filter>
+    </ClInclude>
+    <ClInclude Include="gen_math.h">
+      <Filter>Header Files\gen</Filter>
+    </ClInclude>
+    <ClInclude Include="gen_player.h">
+      <Filter>Header Files\gen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="win32_app.cpp">
@@ -85,6 +94,15 @@
     </ClCompile>
     <ClCompile Include="win32_d2d.cpp">
       <Filter>Source Files\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="gen_dungeon.cpp">
+      <Filter>Source Files\gen</Filter>
+    </ClCompile>
+    <ClCompile Include="gen_math.cpp">
+      <Filter>Source Files\gen</Filter>
+    </ClCompile>
+    <ClCompile Include="gen_player.cpp">
+      <Filter>Source Files\gen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -60,6 +60,7 @@ public:
 	void DisableCursor() noexcept;
 	bool CursorEnabled() const noexcept;
 	static std::optional<int> ProcessMessages() noexcept;
+	win32_d2d& D2D();
 private:
 	void ConfineCursor() noexcept;
 	void FreeCursor() noexcept;
@@ -78,6 +79,6 @@ private:
 	int height;	
 	std::vector<BYTE> rawBuffer;
 	std::string commandLine;
-	std::unique_ptr<win32_d2d> pGfx;
+	std::unique_ptr<win32_d2d> pD2DGfx;
 };
 
