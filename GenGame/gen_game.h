@@ -99,7 +99,7 @@ struct gen_input
 
 struct game_state
 {
-	gen_player Player;
+	gen_player Player;	
 };
 
 struct game_memory

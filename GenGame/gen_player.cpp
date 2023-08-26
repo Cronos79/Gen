@@ -6,11 +6,12 @@
    ======================================================================== */
 #include "gen_player.h"
 #include "gen_game.h"
+#include "gen_math.h"
 
 static gen_player InitPlayer()
 {
 	gen_player Player;
-	Player.Location = Vec3();
+	Player.Location = Vec3(3,3,0);
 	Player.Color = D2D1::ColorF(D2D1::ColorF::Gold);
 	Player.Fill = true;
 	Player.ZOrder = 10;
@@ -20,19 +21,10 @@ static gen_player InitPlayer()
 
 static void MovePlayer(game_state* GameState, gen_input Input, float DeltaTime)
 {
-	float PlayerSpeed = 2.25f * DeltaTime;
-	if (Input.A.IsDown)
-	{
-		PlayerSpeed = 6.5f * DeltaTime;
-	}
-	else
-	{
-		PlayerSpeed = 2.25f * DeltaTime;
-	}
-
+	Vec3 Acceleration = {};
 	if (Input.LStick.Y != 0.0f)
 	{
-		GameState->Player.Location.Y += -Input.LStick.Y * PlayerSpeed;
+		Acceleration.y += -Input.LStick.Y;
 		if (Input.LStick.Y > 0.0f)
 		{
 			GameState->Player.Facing = PlayerFacing::UP;
@@ -44,7 +36,7 @@ static void MovePlayer(game_state* GameState, gen_input Input, float DeltaTime)
 	}
 	if (Input.LStick.X != 0.0f)
 	{
-		GameState->Player.Location.X += Input.LStick.X * PlayerSpeed;
+		Acceleration.x += Input.LStick.X;
 		if (Input.LStick.X < 0.0f)
 		{
 			GameState->Player.Facing = PlayerFacing::LEFT;
@@ -53,5 +45,29 @@ static void MovePlayer(game_state* GameState, gen_input Input, float DeltaTime)
 		{
 			GameState->Player.Facing = PlayerFacing::RIGHT;
 		}
-	}	
+	}
+
+	if ((Acceleration.x != 0.0f) && (Acceleration.y != 0.0f))
+	{
+		Acceleration *= 0.707106781187f;
+	}
+
+	float PlayerSpeed = 5.0f; // #NOTE: m/s^2
+	if (Input.A.IsDown)
+	{
+		PlayerSpeed = 25.0f;
+	}
+
+	Acceleration *= PlayerSpeed;	
+
+	Acceleration += -1.5f * GameState->Player.Velocity;
+
+	Vec3 NewPlayerP = GameState->Player.Location;
+
+	NewPlayerP = (0.5f * Acceleration * Square(DeltaTime) +
+		GameState->Player.Velocity * DeltaTime +
+		NewPlayerP);
+	GameState->Player.Velocity = Acceleration * DeltaTime + GameState->Player.Velocity;
+
+	GameState->Player.Location = NewPlayerP;
 }

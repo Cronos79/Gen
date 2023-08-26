@@ -19,7 +19,8 @@ enum PlayerFacing
 
 struct gen_player
 {
-	Vec3 Location;
+	Vec3 Location = {};
+	Vec3 Velocity = {};
 	PlayerFacing Facing;
 	D2D1_COLOR_F Color;
 	bool Fill;

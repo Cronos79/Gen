@@ -32,8 +32,11 @@ static void GenUpdate(game_memory* Memory, gen_input Input)
 	{
 		gen_player Player = InitPlayer();
 		GameState->Player = Player;
-		GameState->Player.Location.X = 3;
-		GameState->Player.Location.Y = 3;
+		GameState->Player.Location.x = 3;
+		GameState->Player.Location.y = 3;
+		GameState->Player.Velocity.x = 0;
+		GameState->Player.Velocity.y = 0;
+		GameState->Player.Velocity.z = 0;
 
 		Memory->IsInitialized = true;
 	}

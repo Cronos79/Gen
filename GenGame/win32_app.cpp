@@ -171,7 +171,7 @@ void win32_app::Render(float dt)
 	game_state* GameState = (game_state*)GameMemory.GameStorage;
 	
 	//auto c = D2D1::ColorF(drawable.Color.r, drawable.Color.g, drawable.Color.b, drawable.Color.a);
-	wnd.D2D().DrawPlayer(Vec2(GameState->Player.Location.X, GameState->Player.Location.Y), D2D1::ColorF(GameState->Player.Color.r, GameState->Player.Color.g, GameState->Player.Color.b, GameState->Player.Color.a));
+	wnd.D2D().DrawPlayer(Vec2(GameState->Player.Location.x, GameState->Player.Location.y), D2D1::ColorF(GameState->Player.Color.r, GameState->Player.Color.g, GameState->Player.Color.b, GameState->Player.Color.a));
 
 	wnd.D2D().RT()->EndDraw();
 }
