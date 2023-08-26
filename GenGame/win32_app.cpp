@@ -160,19 +160,18 @@ void win32_app::Update(float dt)
 
 void win32_app::Render(float dt)
 {
-	int size = 64;
-	wnd.D2D().RT()->BeginDraw();	
+	wnd.D2D().RT()->BeginDraw();
 
 	for (gen_drawable& drawable : GameMemory.Drawables)
 	{
-		auto c = D2D1::ColorF(drawable.Color.r, drawable.Color.g, drawable.Color.b, drawable.Color.a);
-		wnd.D2D().DrawRect(D2D1::RectF(size * drawable.Column, size * drawable.Row, (size * drawable.Column) + size, (size * drawable.Row) + size), c);		
+		auto c = D2D1::ColorF(drawable.Color.r, drawable.Color.g, drawable.Color.b, drawable.Color.a);	
+		wnd.D2D().DrawRect(Vec2((float)drawable.Column, (float)drawable.Row), c);
 	}
 
 	game_state* GameState = (game_state*)GameMemory.GameStorage;
 	
 	//auto c = D2D1::ColorF(drawable.Color.r, drawable.Color.g, drawable.Color.b, drawable.Color.a);
-	wnd.D2D().DrawPlayer(D2D1::RectF(GameState->Player.Location.X, GameState->Player.Location.Y, GameState->Player.Location.X + 40.0f, GameState->Player.Location.Y + 60.0f), D2D1::ColorF(GameState->Player.Color.r, GameState->Player.Color.g, GameState->Player.Color.b, GameState->Player.Color.a));
+	wnd.D2D().DrawPlayer(Vec2(GameState->Player.Location.X, GameState->Player.Location.Y), D2D1::ColorF(GameState->Player.Color.r, GameState->Player.Color.g, GameState->Player.Color.b, GameState->Player.Color.a));
 
 	wnd.D2D().RT()->EndDraw();
 }

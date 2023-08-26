@@ -8,6 +8,7 @@
 #include "win32_win.h"
 #include <d2d1.h>
 #include <wrl/module.h>
+#include "gen_math.h"
 
 class win32_d2d
 {
@@ -18,10 +19,13 @@ public:
 	~win32_d2d();
 public:
 	ID2D1HwndRenderTarget* RT();
+	void DrawRect(Vec2 Rect, D2D1::ColorF Color, bool Fill = true);
 	void DrawRect(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill = true);
 	void DrawPlayer(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill = true);
+	void DrawPlayer(Vec2 Rect, D2D1::ColorF Color, bool Fill = true);
 private:
 	Microsoft::WRL::ComPtr<ID2D1Factory> pD2DFactory;
 	Microsoft::WRL::ComPtr<ID2D1HwndRenderTarget> pRT;
+	float PixelsPerMeter = 64;
 };
 

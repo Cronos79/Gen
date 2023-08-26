@@ -54,6 +54,12 @@ void win32_d2d::DrawRect(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill)
 	}		
 }
 
+void win32_d2d::DrawRect(Vec2 Rect, D2D1::ColorF Color, bool Fill /*= true*/)
+{
+	DrawRect(D2D1::RectF(PixelsPerMeter * Rect.X, PixelsPerMeter * Rect.Y, (PixelsPerMeter * Rect.X) + PixelsPerMeter,
+		(PixelsPerMeter * Rect.Y) + PixelsPerMeter), Color);
+}
+
 void win32_d2d::DrawPlayer(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill /*= true*/)
 {
 	if (!pRT) { return; }
@@ -72,4 +78,9 @@ void win32_d2d::DrawPlayer(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill /*= t
 		}
 		pBrush->Release();
 	}
+}
+
+void win32_d2d::DrawPlayer(Vec2 Rect, D2D1::ColorF Color, bool Fill /*= true*/)
+{
+	DrawPlayer(D2D1::RectF(Rect.X * PixelsPerMeter, Rect.Y * PixelsPerMeter, (Rect.X * PixelsPerMeter) + 40.0f, (Rect.Y * PixelsPerMeter) + 60.0f), Color);
 }

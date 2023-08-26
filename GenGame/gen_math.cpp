@@ -126,3 +126,74 @@ Vec3& Vec3::operator-(Vec3 other)
 
 	return Result;
 }
+
+Vec4::Vec4()
+{
+	X = 0;
+	Y = 0;
+	Z = 0;
+	W = 0;
+}
+
+Vec4::Vec4(float x, float y, float z, float w)
+{
+	X = x;
+	Y = y;
+	Z = z;
+	W = w;
+}
+
+Vec4& Vec4::operator*(float f)
+{
+	Vec4 Result;
+	Result.X = X * f;
+	Result.Y = Y * f;
+	Result.Z = Z * f;
+	Result.W = W * f;
+
+	return Result;
+}
+
+Vec4& Vec4::operator*(Vec4 other)
+{
+	Vec4 Result;
+	Result.X = X * other.X;
+	Result.Y = Y * other.Y;
+	Result.Z = Z * other.Z;
+	Result.W = W * other.W;
+
+	return Result;
+}
+
+Vec4& Vec4::operator+(Vec4 other)
+{
+	Vec4 Result;
+	Result.X = X + other.X;
+	Result.Y = Y + other.Y;
+	Result.Z = Z + other.Z;
+	Result.W = W + other.W;
+
+	return Result;
+}
+
+Vec4& Vec4::operator-()
+{
+	Vec4 Result;
+	Result.X = -X;
+	Result.Y = -Y;
+	Result.Z = -Z;
+	Result.W = -W;
+
+	return Result;
+}
+
+Vec4& Vec4::operator-(Vec4 other)
+{
+	Vec4 Result;
+	Result.X = X - other.X;
+	Result.Y = Y - other.Y;
+	Result.Z = Z - other.Z;
+	Result.W = W - other.W;
+
+	return Result;
+}

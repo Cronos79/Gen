@@ -35,3 +35,19 @@ public:
 	Vec3& operator-(Vec3 other);
 };
 
+class Vec4
+{
+public:
+	float X;
+	float Y;
+	float Z;
+	float W;
+	Vec4();
+	Vec4(float x, float y, float z, float w);
+	Vec4& operator*(float f);
+	Vec4& operator*(Vec4 other);
+	Vec4& operator+(Vec4 other);
+	Vec4& operator-();
+	Vec4& operator-(Vec4 other);
+};
+

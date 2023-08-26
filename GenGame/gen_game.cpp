@@ -4,7 +4,7 @@
    $Creator: Matt Brock $
    $Notice: (C) Copyright 2023 by CronoGames All Rights Reserved. $
    ======================================================================== */
-#include <Windows.h>
+
 #include <stdio.h>
 #include <vector>
 #include "gen_game.h"
@@ -13,14 +13,12 @@
 /**********************************************************************************
 * #TODO: Wish list
 * Tiled world
-* Hero
 * AI NPC / Enemies 
 * xinput
 * xaudio2
 * assimp
 * asset mng
 * sprites
-* D2D
 * D3D
 * OpenGL
 * Networking multiplayer
@@ -34,29 +32,13 @@ static void GenUpdate(game_memory* Memory, gen_input Input)
 	{
 		gen_player Player = InitPlayer();
 		GameState->Player = Player;
-		GameState->Player.Location.X = 150;
-		GameState->Player.Location.Y = 150;
+		GameState->Player.Location.X = 3;
+		GameState->Player.Location.Y = 3;
 
 		Memory->IsInitialized = true;
 	}
 
-	float PlayerSpeed = 8.0f;
-	if (Input.A.IsDown)
-	{
-		PlayerSpeed = 30.0f;
-	}
-	else
-	{
-		PlayerSpeed = 8.0f;
-	}
-	if (Input.LStick.Y != 0.0f)
-	{
-		GameState->Player.Location.Y += -Input.LStick.Y * PlayerSpeed;
-	}
-	if (Input.LStick.X != 0.0f)
-	{
-		GameState->Player.Location.X += Input.LStick.X * PlayerSpeed;
-	}
+	MovePlayer(GameState, Input, Memory->DeltaTime);
 
 	uint32_t Tiles00[16][29] =
 	{
@@ -77,6 +59,8 @@ static void GenUpdate(game_memory* Memory, gen_input Input)
 		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
 		{1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  0, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, 1},
 	};
+
+	Memory->Drawables.clear();
 
 	for (int Row = 0;
 		Row < 16;

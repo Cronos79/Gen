@@ -9,9 +9,18 @@
 #include <d2d1.h>
 #include <stdint.h>
 
+enum PlayerFacing
+{
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
+
 struct gen_player
 {
 	Vec3 Location;
+	PlayerFacing Facing;
 	D2D1_COLOR_F Color;
 	bool Fill;
 	int32_t ZOrder;
