@@ -18,3 +18,9 @@ inline float Square(float A)
 
 	return A;
 }
+
+inline float DotProduct(Vec3 A, Vec3 B)
+{
+	float Result = A.x*B.x + A.y*B.y;
+	return Result;
+}

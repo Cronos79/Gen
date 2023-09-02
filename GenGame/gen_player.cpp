@@ -70,4 +70,8 @@ static void MovePlayer(game_state* GameState, gen_input Input, float DeltaTime)
 	GameState->Player.Velocity = Acceleration * DeltaTime + GameState->Player.Velocity;
 
 	GameState->Player.Location = NewPlayerP;
+
+	// Bounce off wall
+	/*Vec3 Wall = {0,1,0}; // -2 bounces -1 slides on wall
+	GameState->Player.Velocity = GameState->Player.Velocity - 2 * DotProduct(GameState->Player.Velocity, Wall) * Wall;*/
 }

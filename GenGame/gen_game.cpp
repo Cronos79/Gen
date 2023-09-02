@@ -13,8 +13,9 @@
 /**********************************************************************************
 * #TODO: Wish list
 * Tiled world
+* Collision
+* Working doors
 * AI NPC / Enemies 
-* xinput
 * xaudio2
 * assimp
 * asset mng
@@ -24,10 +25,16 @@
 * Networking multiplayer
 **********************************************************************************/
 
+
+
 static void GenUpdate(game_memory* Memory, gen_input Input)
 {
 	Assert(sizeof(game_state) <= Memory->GameStorageSize);
 	game_state* GameState = (game_state*)Memory->GameStorage;
+	
+	
+	
+	int32_t ttype;
 	if (!Memory->IsInitialized)
 	{
 		gen_player Player = InitPlayer();
@@ -38,42 +45,30 @@ static void GenUpdate(game_memory* Memory, gen_input Input)
 		GameState->Player.Velocity.y = 0;
 		GameState->Player.Velocity.z = 0;
 
-		Memory->IsInitialized = true;
+		GameState->Rooms = GenDungeon(200, 200);
+		GameState->CurrentRoom = GameState->Rooms.at(1);
+		GameState->CurrentRoomHeight = GameState->CurrentRoom.Dim.bottom - GameState->CurrentRoom.Dim.top;
+		GameState->CurrentRoomWidth = GameState->CurrentRoom.Dim.right - GameState->CurrentRoom.Dim.left;
+
+		Memory->IsInitialized = true;			
 	}
 
-	MovePlayer(GameState, Input, Memory->DeltaTime);
-
-	uint32_t Tiles00[16][29] =
-	{
-		{1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 0},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0, 1},
-		{1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  0, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, 1},
-	};
+	MovePlayer(GameState, Input, Memory->DeltaTime);	
 
 	Memory->Drawables.clear();
-
+	int32_t pos = 0;
 	for (int Row = 0;
-		Row < 16;
+		Row < GameState->CurrentRoomHeight;
 		++Row)
 	{
 		for (int Column = 0;
-			Column < 29;
+			Column < GameState->CurrentRoomWidth;
 			++Column)
 		{
-			int32_t ttype = Tiles00[Row][Column];
+			//ttype = Room.Tiles.back().Tile; // Tiles00[Row][Column];
+			//Room.Tiles.pop_back();
+			ttype = GameState->CurrentRoom.Tiles.at(pos++).Tile;
+			
 			if (ttype == 0)
 			{
 				gen_drawable d = {};
@@ -83,12 +78,21 @@ static void GenUpdate(game_memory* Memory, gen_input Input)
 				d.Fill = true;
 				Memory->Drawables.push_back(d);
 			}
-			else
+			else if (ttype == 1)
 			{
 				gen_drawable d = {};
 				d.Column = Column;
 				d.Row = Row;
 				d.Color = D2D1::ColorF(D2D1::ColorF::BurlyWood);
+				d.Fill = true;
+				Memory->Drawables.push_back(d);
+			}
+			else
+			{
+				gen_drawable d = {};
+				d.Column = Column;
+				d.Row = Row;
+				d.Color = D2D1::ColorF(D2D1::ColorF::Brown);
 				d.Fill = true;
 				Memory->Drawables.push_back(d);
 			}

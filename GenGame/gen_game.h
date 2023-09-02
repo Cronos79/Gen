@@ -11,6 +11,11 @@
 #include "gen_math.h"
 #include "gen_player.h"
 
+#ifndef gendun
+#define gendun
+#include "gen_dungeon.cpp"
+#endif
+
 #if GEN_SLOW
 #define Assert(Expression) if(!(Expression)) {*(int *)0 = 0;}
 #else
@@ -31,17 +36,6 @@ struct gen_drawable
 	D2D1_COLOR_F Color;
 	bool Fill;
 	int32_t ZOrder;
-};
-
-// Tile stuff
-struct gen_tile
-{
-	uint32_t Tile;
-};
-
-struct gen_tile_map
-{
-	gen_tile Tiles[];
 };
 
 // Input stuff
@@ -100,6 +94,10 @@ struct gen_input
 struct game_state
 {
 	gen_player Player;	
+	std::vector<gen_room> Rooms;
+	gen_room CurrentRoom;
+	uint32_t CurrentRoomHeight = 0;
+	uint32_t CurrentRoomWidth = 0;
 };
 
 struct game_memory
