@@ -7,6 +7,7 @@
 #pragma once
 #include <stdint.h>
 #include <vector>
+#include "gen_tile.h"
 
 enum gen_sister_room
 {
@@ -16,13 +17,6 @@ enum gen_sister_room
 	ROOMRIGHT
 };
 
-enum TileType
-{
-	DIRT_FLOOR,
-	STONE_WALL,
-	DUNGEON_WOOD_DOOR
-};
-
 struct gen_rect
 {
 	int32_t top;
@@ -30,11 +24,6 @@ struct gen_rect
 	int32_t left;
 	int32_t right;
 	gen_sister_room SisterRoom;
-};
-
-struct gen_tile
-{	
-	TileType Type;
 };
 
 struct gen_room

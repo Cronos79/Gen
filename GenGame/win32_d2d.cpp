@@ -82,5 +82,5 @@ void win32_d2d::DrawPlayer(D2D1_RECT_F Rect, D2D1::ColorF Color, bool Fill /*= t
 
 void win32_d2d::DrawPlayer(Vec2 Rect, D2D1::ColorF Color, bool Fill /*= true*/)
 {
-	DrawPlayer(D2D1::RectF(Rect.x * PixelsPerMeter, Rect.y * PixelsPerMeter, (Rect.x * PixelsPerMeter) + 40.0f, (Rect.y * PixelsPerMeter) + 60.0f), Color);
+	DrawPlayer(D2D1::RectF(Rect.x * PixelsPerMeter, Rect.y * PixelsPerMeter, (Rect.x * PixelsPerMeter) + 40.0f, (Rect.y * PixelsPerMeter) + 60.0f), Color, Fill);
 }

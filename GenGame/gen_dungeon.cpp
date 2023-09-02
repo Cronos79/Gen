@@ -10,6 +10,7 @@
 #include <list>
 #include <random>
 
+
 /****************************************
 * https://gamedev.stackexchange.com/questions/82059/algorithm-for-procedural-2d-map-with-connected-paths
 * https://www.roguebasin.com/index.php?title=C%2B%2B_Example_of_Dungeon-Building_Algorithm
@@ -198,7 +199,12 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 	int32_t RoomNumber = 0;
 	while (RoomNumber < Rooms->size())
 	{
+		bool SecondDoor = true;
 		//assert(Rooms->at(RoomNumber).RoomNumber != RoomNumber); // #TODO: Need a platform file
+		if (RoomNumber % 2 == 0)
+		{
+			SecondDoor = false;
+		}
 	
 		switch (Rooms->at(RoomNumber).SisterRoom)
 		{
@@ -211,11 +217,19 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 				int32_t rInt = GetRandomIntInRange(1, Hsize - 1); // #TODO: Check if this is right
 				gen_tile t;
 				t.Type = TileType::DUNGEON_WOOD_DOOR;
+				t.IsDoor = true;
+				t.DoorTo = RoomNumber - 1;
 				Rooms->at(RoomNumber).Tiles[rInt] = t;
-			}
-			else
-			{
-				//Rooms->pop_back();
+				if (SecondDoor)
+				{
+					int32_t Vsize = Rooms->at(RoomNumber).Dim.bottom - Rooms->at(RoomNumber).Dim.top;
+					rInt = GetRandomIntInRange(1, Vsize - 2);
+					t.Type = TileType::DUNGEON_WOOD_DOOR;
+					t.DoorTo = RoomNumber - 2;
+					t.IsDoor = true;
+					int num = Hsize * rInt - 1;
+					Rooms->at(RoomNumber).Tiles[num] = t;
+				}
 			}
 		}break;
 		case ROOMDOWN:
@@ -227,12 +241,19 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 				int32_t rInt = GetRandomIntInRange(1, Hsize - 1);
 				gen_tile t;
 				t.Type = TileType::DUNGEON_WOOD_DOOR;
+				t.IsDoor = true;
+				t.DoorTo = RoomNumber + 1;
 				int num = ((Vsize - 1) * Hsize) + rInt;
 				Rooms->at(RoomNumber).Tiles[num] = t;
-			}
-			else
-			{
-				//Rooms->pop_back();
+				if (SecondDoor)
+				{
+					rInt = GetRandomIntInRange(1, Vsize - 2);
+					t.Type = TileType::DUNGEON_WOOD_DOOR;
+					t.IsDoor = true;
+					t.DoorTo = RoomNumber + 2;
+					int num = Hsize * rInt - 1;
+					Rooms->at(RoomNumber).Tiles[num] = t;
+				}
 			}
 		}break;
 		case ROOMLEFT:
@@ -241,15 +262,22 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 			{
 				int32_t Hsize = Rooms->at(RoomNumber).Dim.right - Rooms->at(RoomNumber).Dim.left;
 				int32_t Vsize = Rooms->at(RoomNumber).Dim.bottom - Rooms->at(RoomNumber).Dim.top;
-				int32_t rInt = GetRandomIntInRange(1, Vsize - 1);
+				int32_t rInt = GetRandomIntInRange(1, Vsize - 2);
 				gen_tile t;
 				t.Type = TileType::DUNGEON_WOOD_DOOR;
+				t.IsDoor = true;
+				t.DoorTo = RoomNumber - 1;
 				int num = rInt * Hsize;
 				Rooms->at(RoomNumber).Tiles[num] = t;
-			}
-			else
-			{
-				//Rooms->pop_back();
+				if (SecondDoor)
+				{
+					int32_t rInt = GetRandomIntInRange(1, Hsize - 1);
+					t.Type = TileType::DUNGEON_WOOD_DOOR;
+					t.IsDoor = true;
+					t.DoorTo = RoomNumber - 2;
+					int num = ((Vsize - 1) * Hsize) + rInt;
+					Rooms->at(RoomNumber).Tiles[num] = t;
+				}
 			}
 		}break;
 		case ROOMRIGHT:
@@ -261,12 +289,19 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 				int32_t rInt = GetRandomIntInRange(2, Vsize - 2);
 				gen_tile t;
 				t.Type = TileType::DUNGEON_WOOD_DOOR;
+				t.IsDoor = true;
+				t.DoorTo = RoomNumber + 1;
 				int num = Hsize * rInt - 1; // #TODO: Needs testing
 				Rooms->at(RoomNumber).Tiles[num] = t;
-			}
-			else
-			{
-				//Rooms->pop_back();
+				if (SecondDoor)
+				{
+					int32_t rInt = GetRandomIntInRange(1, Hsize - 1);
+					t.Type = TileType::DUNGEON_WOOD_DOOR;
+					t.IsDoor = true;
+					t.DoorTo = RoomNumber + 2;
+					int num = ((Vsize - 1) * Hsize) + rInt;
+					Rooms->at(RoomNumber).Tiles[num] = t;
+				}
 			}
 		}break;
 		default:

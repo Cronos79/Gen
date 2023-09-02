@@ -10,11 +10,7 @@
 #include <vector>
 #include "gen_math.h"
 #include "gen_player.h"
-
-#ifndef gendun
-#define gendun
-#include "gen_dungeon.cpp"
-#endif
+#include "gen_dungeon.h"
 
 #if GEN_SLOW
 #define Assert(Expression) if(!(Expression)) {*(int *)0 = 0;}
@@ -29,16 +25,7 @@
 #define Gigabytes(Value) (Megabytes(Value)*1024LL)
 #define Terabytes(Value) (Gigabytes(Value)*1024LL)
 
-struct gen_drawable
-{
-	int32_t Row;
-	int32_t Column;
-	D2D1_COLOR_F Color;
-	bool Fill;
-	int32_t ZOrder;
-};
-
-// Input stuff
+   // Input stuff
 struct gen_input_button
 {
 	bool32 IsDown;
@@ -51,7 +38,7 @@ struct gen_input_analog
 };
 
 struct gen_input
-{	
+{
 	union
 	{
 		gen_input_button Buttons[14];
@@ -75,7 +62,7 @@ struct gen_input
 
 			gen_input_button Back;
 			gen_input_button Start;
-		};		
+		};
 	};
 	union
 	{
@@ -88,16 +75,26 @@ struct gen_input
 			gen_input_analog RTrigger;
 		};
 	};
-	
+
 };
 
 struct game_state
 {
-	gen_player Player;	
+	gen_player Player;
+	gen_player ColPlayer;
 	std::vector<gen_room> Rooms;
 	gen_room CurrentRoom;
 	uint32_t CurrentRoomHeight = 0;
 	uint32_t CurrentRoomWidth = 0;
+};
+
+struct gen_drawable
+{
+	int32_t Row;
+	int32_t Column;
+	D2D1_COLOR_F Color;
+	bool Fill;
+	int32_t ZOrder;
 };
 
 struct game_memory

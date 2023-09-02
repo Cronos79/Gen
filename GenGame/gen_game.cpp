@@ -5,10 +5,13 @@
    $Notice: (C) Copyright 2023 by CronoGames All Rights Reserved. $
    ======================================================================== */
 
+#include "gen_player.cpp"
+#include "gen_dungeon.cpp"
+
 #include <stdio.h>
 #include <vector>
 #include "gen_game.h"
-#include "gen_player.cpp"
+#include "gen_tile.h"
 
 /**********************************************************************************
 * #TODO: Wish list
@@ -25,36 +28,22 @@
 * Networking multiplayer
 **********************************************************************************/
 
-
-
-static void GenUpdate(game_memory* Memory, gen_input Input)
+static void DrawTiles(game_memory* Memory)
 {
-	Assert(sizeof(game_state) <= Memory->GameStorageSize);
-	game_state* GameState = (game_state*)Memory->GameStorage;	
-	
-	TileType tiletype;
-	if (!Memory->IsInitialized)
-	{
-		gen_player Player = InitPlayer();
-		GameState->Player = Player;
-		GameState->Player.Location.x = 3;
-		GameState->Player.Location.y = 3;
-		GameState->Player.Velocity.x = 0;
-		GameState->Player.Velocity.y = 0;
-		GameState->Player.Velocity.z = 0;
+	game_state* GameState = (game_state*)Memory->GameStorage;
 
+	if (GameState->Rooms.size() <= 0)
+	{
 		GameState->Rooms = GenDungeon(200, 200);
 		GameState->CurrentRoom = GameState->Rooms.at(0);
-		GameState->CurrentRoomHeight = GameState->CurrentRoom.Dim.bottom - GameState->CurrentRoom.Dim.top;
-		GameState->CurrentRoomWidth = GameState->CurrentRoom.Dim.right - GameState->CurrentRoom.Dim.left;
-
-		Memory->IsInitialized = true;			
 	}
-
-	MovePlayer(GameState, Input, Memory->DeltaTime);	
+	
+	GameState->CurrentRoomHeight = GameState->CurrentRoom.Dim.bottom - GameState->CurrentRoom.Dim.top;
+	GameState->CurrentRoomWidth = GameState->CurrentRoom.Dim.right - GameState->CurrentRoom.Dim.left;
 
 	Memory->Drawables.clear();
 	int32_t pos = 0;
+	TileType tiletype;
 	for (int Row = 0;
 		Row < GameState->CurrentRoomHeight;
 		++Row)
@@ -67,7 +56,7 @@ static void GenUpdate(game_memory* Memory, gen_input Input)
 
 			switch (tiletype)
 			{
-			case DIRT_FLOOR: 
+			case DIRT_FLOOR:
 			{
 				gen_drawable d = {};
 				d.Column = Column;
@@ -106,4 +95,31 @@ static void GenUpdate(game_memory* Memory, gen_input Input)
 			}
 		}
 	}
+}
+
+static void DrawBackGround(game_state* GameState)
+{
+	// draw a bitmap to cover the background
+}
+
+static void GenUpdate(game_memory* Memory, gen_input Input)
+{
+	Assert(sizeof(game_state) <= Memory->GameStorageSize);
+	game_state* GameState = (game_state*)Memory->GameStorage;		
+	if (!Memory->IsInitialized)
+	{
+		gen_player Player = InitPlayer();
+		GameState->Player = Player;
+		GameState->Player.Location.x = 3;
+		GameState->Player.Location.y = 3;
+		GameState->Player.Velocity.x = 0;
+		GameState->Player.Velocity.y = 0;
+		GameState->Player.Velocity.z = 0;		
+
+		Memory->IsInitialized = true;			
+	}
+
+	DrawBackGround(GameState);
+	DrawTiles(Memory);
+	MovePlayer(GameState, Input, Memory->DeltaTime);		
 }

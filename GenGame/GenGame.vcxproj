@@ -92,6 +92,7 @@
     <ClInclude Include="gen_game.h" />
     <ClInclude Include="gen_math.h" />
     <ClInclude Include="gen_player.h" />
+    <ClInclude Include="gen_tile.h" />
     <ClInclude Include="win32_app.h" />
     <ClInclude Include="win32_d2d.h" />
     <ClInclude Include="win32_exception.h" />

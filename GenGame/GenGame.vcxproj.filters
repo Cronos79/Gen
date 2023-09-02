@@ -66,6 +66,9 @@
     <ClInclude Include="gen_player.h">
       <Filter>Header Files\gen</Filter>
     </ClInclude>
+    <ClInclude Include="gen_tile.h">
+      <Filter>Header Files\gen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="win32_app.cpp">

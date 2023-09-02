@@ -172,6 +172,7 @@ void win32_app::Render(float dt)
 	
 	//auto c = D2D1::ColorF(drawable.Color.r, drawable.Color.g, drawable.Color.b, drawable.Color.a);
 	wnd.D2D().DrawPlayer(Vec2(GameState->Player.Location.x, GameState->Player.Location.y), D2D1::ColorF(GameState->Player.Color.r, GameState->Player.Color.g, GameState->Player.Color.b, GameState->Player.Color.a));
+	wnd.D2D().DrawPlayer(Vec2(GameState->ColPlayer.Location.x, GameState->ColPlayer.Location.y), D2D1::ColorF(1.0f, 0.0f, 0.0f, 1.0f), false);
 
 	wnd.D2D().RT()->EndDraw();
 }
