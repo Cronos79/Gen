@@ -139,6 +139,7 @@ static void GenSplitCells(int32_t Width, int32_t Height, std::vector<gen_rect>* 
 
 static void GenMakeRooms(std::vector<gen_rect>* SplitCells, std::vector<gen_room>* Rooms)
 {
+	int32_t RoomNumber = 0;
 	for (gen_rect rect : *SplitCells)
 	{
 		gen_room Room;
@@ -160,32 +161,35 @@ static void GenMakeRooms(std::vector<gen_rect>* SplitCells, std::vector<gen_room
 
 		Room.SisterRoom = rect.SisterRoom;
 
+		Room.RoomNumber = RoomNumber;
+
 		for (int row = 0; row < Height; row++)
 		{
 			for (int col = 0; col < Width; col++)
 			{	
 				gen_tile g = {};
-				g.Tile = 0;
+				g.Type = TileType::DIRT_FLOOR;
 				if (row == 0)
 				{
-					g.Tile = 1;
+					g.Type = TileType::STONE_WALL;
 				}
 				else if (row == Height-1)
 				{
-					g.Tile = 1;
+					g.Type = TileType::STONE_WALL;
 				}
 				if (col == 0)
 				{
-					g.Tile = 1;
+					g.Type = TileType::STONE_WALL;
 				}
 				else if (col == Width - 1)
 				{
-					g.Tile = 1;
+					g.Type = TileType::STONE_WALL;
 				}
 				Room.Tiles.push_back(g);
 			}
 		}
 		Rooms->push_back(Room);
+		RoomNumber++;
 	}
 }
 
@@ -194,6 +198,8 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 	int32_t RoomNumber = 0;
 	while (RoomNumber < Rooms->size())
 	{
+		//assert(Rooms->at(RoomNumber).RoomNumber != RoomNumber); // #TODO: Need a platform file
+	
 		switch (Rooms->at(RoomNumber).SisterRoom)
 		{
 		case ROOMUP:
@@ -204,7 +210,7 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 				int32_t Hsize = Rooms->at(RoomNumber).Dim.right - Rooms->at(RoomNumber).Dim.left;
 				int32_t rInt = GetRandomIntInRange(1, Hsize - 1); // #TODO: Check if this is right
 				gen_tile t;
-				t.Tile = 3;
+				t.Type = TileType::DUNGEON_WOOD_DOOR;
 				Rooms->at(RoomNumber).Tiles[rInt] = t;
 			}
 			else
@@ -220,7 +226,7 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 				int32_t Vsize = Rooms->at(RoomNumber).Dim.bottom - Rooms->at(RoomNumber).Dim.top;
 				int32_t rInt = GetRandomIntInRange(1, Hsize - 1);
 				gen_tile t;
-				t.Tile = 3;
+				t.Type = TileType::DUNGEON_WOOD_DOOR;
 				int num = ((Vsize - 1) * Hsize) + rInt;
 				Rooms->at(RoomNumber).Tiles[num] = t;
 			}
@@ -237,7 +243,7 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 				int32_t Vsize = Rooms->at(RoomNumber).Dim.bottom - Rooms->at(RoomNumber).Dim.top;
 				int32_t rInt = GetRandomIntInRange(1, Vsize - 1);
 				gen_tile t;
-				t.Tile = 3;
+				t.Type = TileType::DUNGEON_WOOD_DOOR;
 				int num = rInt * Hsize;
 				Rooms->at(RoomNumber).Tiles[num] = t;
 			}
@@ -254,7 +260,7 @@ static void GenMakeDoors(std::vector<gen_room>* Rooms)
 				int32_t Vsize = Rooms->at(RoomNumber).Dim.bottom - Rooms->at(RoomNumber).Dim.top;
 				int32_t rInt = GetRandomIntInRange(2, Vsize - 2);
 				gen_tile t;
-				t.Tile = 3;
+				t.Type = TileType::DUNGEON_WOOD_DOOR;
 				int num = Hsize * rInt - 1; // #TODO: Needs testing
 				Rooms->at(RoomNumber).Tiles[num] = t;
 			}

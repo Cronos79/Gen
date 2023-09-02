@@ -16,6 +16,13 @@ enum gen_sister_room
 	ROOMRIGHT
 };
 
+enum TileType
+{
+	DIRT_FLOOR,
+	STONE_WALL,
+	DUNGEON_WOOD_DOOR
+};
+
 struct gen_rect
 {
 	int32_t top;
@@ -27,13 +34,14 @@ struct gen_rect
 
 struct gen_tile
 {	
-	uint32_t Tile;
+	TileType Type;
 };
 
 struct gen_room
 {
 	int32_t MaxRoomX = 29;
 	int32_t MaxRoomY = 16;
+	int32_t RoomNumber;
 	gen_rect Dim;
 	std::vector<gen_tile> Tiles;
 	gen_sister_room SisterRoom;
